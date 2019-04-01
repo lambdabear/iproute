@@ -92,3 +92,18 @@ pub fn add_default_route(route: DefaultRoute) -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+
+pub fn update_default_route(dev: String, gateway: Ipv4Addr) -> Result<(), Box<dyn Error>> {
+    let old_routes = get_default_routes()?;
+
+    let new_route = DefaultRoute::new(gateway, dev);
+    println!("add new default route {:?}", new_route);
+
+    // del old default routes
+    for route in old_routes {
+        del_default_route(route)?;
+    }
+
+    // add new default route
+    add_default_route(new_route)
+}
